@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cron
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Allow
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 20
+      template:
+        spec:
+          containers:
+            - name: echo-hello
+              image: busybox
+              args:
+                - /bin/sh
+                - -c
+                - date; echo Hello from kubernetes cluster
+          restartPolicy: Never
