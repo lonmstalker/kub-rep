@@ -5,7 +5,7 @@ metadata:
   labels:
     app: learn-nginx
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: nginx
@@ -14,9 +14,33 @@ spec:
       labels:
         app: nginx
     spec:
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            name: nginx-conf
+          name: nginx-conf
+#        - name: nginx-conf
+#          ephemeral:
+#            volumeClaimTemplate:
+#              metadata:
+#                labels:
+#                  type: nginx-volume
+#              spec:
+#                accessModes: [ "ReadWriteOnce" ]
+#                storageClassName: "scratch-storage-class"
+#                resources:
+#                  requests:
+#                    storage: 10Mi
+#                  limits:
+#                    storage: 10Mi
       containers:
         - name: nginx
-          image: nginx:1.21.4
+          image: nginx:latest
+          volumeMounts:
+            - mountPath: /etc/nginx/
+              name: nginx-conf
+              subPath: nginx.conf
+              readOnly: true
           resources:
             limits:
               cpu: 5m
@@ -26,4 +50,5 @@ spec:
               memory: 10Mi
           ports:
             - containerPort: 80
+              protocol: TCP
 
