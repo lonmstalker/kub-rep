@@ -5,7 +5,7 @@ metadata:
   labels:
     app: learn-nginx
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: nginx
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx:1.21.4
+          image: nginx:latest
           resources:
             requests:
               cpu: 5m

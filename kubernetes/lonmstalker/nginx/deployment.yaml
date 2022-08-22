@@ -36,8 +36,10 @@ spec:
       containers:
         - name: nginx
           image: nginx:latest
+          command: [ "sh", "-c", "adduser --system --no-create-home --shell /bin/false --group --disabled-login www 
+                      && service nginx start"]
           volumeMounts:
-            - mountPath: /etc/nginx/
+            - mountPath: /etc/nginx/nginx.conf
               name: nginx-conf
               subPath: nginx.conf
               readOnly: true
@@ -51,4 +53,6 @@ spec:
           ports:
             - containerPort: 80
               protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
 
